@@ -1,0 +1,57 @@
+# === Java/Spring Boot ===
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+.vscode/
+.DS_Store
+
+# === Spring Boot 민감정보/설정 파일 ===
+src/main/resources/application.properties
+src/main/resources/application.yml
+src/main/resources/application-*.properties
+src/main/resources/application-*.yml
+!src/main/resources/application-sample.properties
+!src/main/resources/application-sample.yml
+
+# 인증/키/시크릿/자격증명 파일
+src/main/resources/*.pem
+src/main/resources/*.key
+src/main/resources/*.crt
+src/main/resources/*.p12
+src/main/resources/*.jks
+
+# 로그파일/임시파일
+*.log
+*.tmp
+
+# OS별
+Thumbs.db
