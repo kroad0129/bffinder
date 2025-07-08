@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +15,6 @@ export default function Home() {
 
   const router = useRouter();
 
-  // 로그인 상태 및 닉네임 감지
   useEffect(() => {
     if (typeof window === "undefined") return;
     const token = localStorage.getItem("jwt_token");
@@ -22,7 +23,6 @@ export default function Home() {
     setLoginNickname(nick || "");
   }, []);
 
-  // 로그아웃 핸들러
   const handleLogout = () => {
     localStorage.removeItem("jwt_token");
     localStorage.removeItem("login_nickname");
@@ -31,7 +31,6 @@ export default function Home() {
     router.refresh();
   };
 
-  // 🔥 소환사 검색 → puuid 조회 → 이동
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -51,25 +50,30 @@ export default function Home() {
       const { puuid } = await res.json();
       router.push(`/detail?puuid=${encodeURIComponent(puuid)}`);
     } catch {
-      setError("네트워크 오류!");
+      setError("네트워크 오류가 발생했습니다!");
     }
     setLoading(false);
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
-      {/* 상단 우측 로그인/회원가입/마이페이지/로그아웃 */}
-      <div className="flex gap-2 absolute top-4 right-4">
+    <main className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100 relative">
+      {/* 왼쪽 상단 로고 */}
+      <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
+        BFFinder
+      </div>
+
+      {/* 상단 네비게이션 */}
+      <div className="flex gap-3 absolute top-6 right-6 z-50">
         {!isLoggedIn ? (
           <>
             <button
-              className="bg-blue-500 text-white rounded-lg py-2 px-4 font-semibold hover:bg-blue-600"
+              className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2.5 px-5 font-medium transition-all duration-200 soft-shadow"
               onClick={() => router.push("/login")}
             >
               로그인
             </button>
             <button
-              className="bg-gray-400 text-white rounded-lg py-2 px-4 font-semibold hover:bg-gray-600"
+              className="bg-gray-500 hover:bg-gray-600 text-white rounded-xl py-2.5 px-5 font-medium transition-all duration-200 soft-shadow"
               onClick={() => router.push("/signup")}
             >
               회원가입
@@ -78,13 +82,13 @@ export default function Home() {
         ) : (
           <>
             <button
-              className="bg-green-500 text-white rounded-lg py-2 px-4 font-semibold hover:bg-green-600"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-2.5 px-5 font-medium transition-all duration-200 soft-shadow"
               onClick={() => router.push("/mypage")}
             >
-              {loginNickname || "error"}님 마이페이지
+              {loginNickname}님 마이페이지
             </button>
             <button
-              className="bg-red-500 text-white rounded-lg py-2 px-4 font-semibold hover:bg-red-600 ml-2"
+              className="bg-red-500 hover:bg-red-600 text-white rounded-xl py-2.5 px-5 font-medium transition-all duration-200 soft-shadow ml-2"
               onClick={handleLogout}
             >
               로그아웃
@@ -93,33 +97,77 @@ export default function Home() {
         )}
       </div>
 
-      {/* 소환사 검색 폼 */}
+      {/* 메인 컨텐츠 - 완전 중앙 정렬 */}
+      <div className="text-center mb-12">
+        <h1 className="text-5xl font-bold text-gray-800 mb-6">
+          잠든다더니 게임중? 🎮
+        </h1>
+        <div className="space-y-2 text-gray-600">
+          <p className="text-xl">
+            피곤하다며 먼저 잔다던 그 사람의 진실을 확인해보세요
+          </p>
+          <p className="text-lg text-gray-500">
+            {"남자친구가 안자고 게임 하는거 같다구요? 'BF2'로 검색해보세요! 😏"}
+          </p>
+        </div>
+      </div>
+
+      {/* 검색 폼 - 완전 중앙 정렬 */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-md flex flex-col gap-4 w-80"
+        className="bg-white/80 backdrop-blur-sm border border-gray-200 p-8 rounded-2xl soft-shadow-lg flex flex-col gap-5 w-96"
       >
-        <h1 className="text-2xl font-bold text-center mb-2">소환사 검색</h1>
-        <input
-          className="border rounded-lg px-4 py-2"
-          placeholder="닉네임"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-        />
-        <input
-          className="border rounded-lg px-4 py-2"
-          placeholder="태그 (#KR1 등)"
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-        />
-        {error && <div className="text-red-500 text-sm">{error}</div>}
+        <h2 className="text-2xl font-semibold text-center mb-2 text-gray-800">
+          소환사 검색
+        </h2>
+
+        <div className="space-y-4">
+          <input
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="소환사 닉네임"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+          />
+          <input
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="태그 (예: KR1, NA1)"
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
+          />
+        </div>
+
+        {error && (
+          <div className="text-red-600 text-sm text-center bg-red-50 border border-red-200 rounded-xl py-2 px-4">
+            {error}
+          </div>
+        )}
+
         <button
-          className="bg-blue-500 text-white rounded-lg py-2 font-semibold hover:bg-blue-600"
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-3 font-semibold text-lg transition-all duration-200 soft-shadow disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={loading}
         >
-          {loading ? "검색 중..." : "검색"}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              진실 확인 중...
+            </span>
+          ) : (
+            "진실 확인하기 🔍"
+          )}
         </button>
       </form>
+
+      {/* 하단 설명 - 완전 중앙 정렬 */}
+      <div className="absolute bottom-8 text-center text-gray-500 text-sm max-w-md">
+        <p className="mb-2">
+          💡 <strong>꿀팁:</strong> 즐겨찾기에 추가하면 실시간으로 게임 상태를
+          확인할 수 있어요!
+        </p>
+        <p>
+          {"잠든다고 했는데 '게임 중'이라고 뜨면... 어떻게 하실 건가요? 😅"}
+        </p>
+      </div>
     </main>
   );
 }

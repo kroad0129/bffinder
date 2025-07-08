@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import type React from "react";
+
 import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
@@ -32,70 +34,101 @@ export default function SignupPage() {
 
       if (!res.ok) {
         const errData = await res.json();
-        setError(errData.message || "회원가입 실패!");
+        setError(errData.message || "회원가입에 실패했습니다!");
         return;
       }
 
       setOk(true);
-      // 회원가입 성공 → 로그인 페이지로 이동 or 안내
-      setTimeout(() => router.push("/login"), 1200);
+      setTimeout(() => router.push("/login"), 1500);
     } catch (e) {
-      setError("네트워크 오류!");
+      setError("네트워크 오류가 발생했습니다!");
     }
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
+    <main className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100 relative">
+      {/* 왼쪽 상단 로고 */}
+      <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
+        BFFinder
+      </div>
+
+      {/* 뒤로가기 버튼 */}
+      <button
+        className="absolute top-6 left-32 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl py-2.5 px-5 font-medium transition-all duration-200 soft-shadow"
+        onClick={() => router.push("/")}
+      >
+        ← 메인으로
+      </button>
+
+      {/* 메인 컨텐츠 - 완전 중앙 정렬 */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">회원가입</h1>
+        <p className="text-gray-600">
+          {"소환사들의 게임 상태를 쉽게 확인해보세요! 🎮"}
+        </p>
+      </div>
+
       <form
         onSubmit={handleSignup}
-        className="bg-white p-8 rounded-2xl shadow-md flex flex-col gap-4 w-80"
+        className="bg-white/80 backdrop-blur-sm border border-gray-200 p-8 rounded-2xl soft-shadow-lg flex flex-col gap-5 w-96"
       >
-        <h2 className="text-xl font-bold text-center mb-2">회원가입</h2>
-        <input
-          className="border rounded-lg px-4 py-2"
-          placeholder="아이디"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className="border rounded-lg px-4 py-2"
-          placeholder="닉네임"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-        />
-        <input
-          type="email"
-          className="border rounded-lg px-4 py-2"
-          placeholder="이메일"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          className="border rounded-lg px-4 py-2"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <div className="text-red-500 text-sm">{error}</div>}
-        {ok && (
-          <div className="text-green-600 text-sm">
-            회원가입 성공! 로그인해주세요.
+        <div className="space-y-4">
+          <input
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="아이디"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="닉네임"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+          />
+          <input
+            type="email"
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="이메일"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        {error && (
+          <div className="text-red-600 text-sm text-center bg-red-50 border border-red-200 rounded-xl py-3 px-4">
+            {error}
           </div>
         )}
+
+        {ok && (
+          <div className="text-emerald-600 text-sm text-center bg-emerald-50 border border-emerald-200 rounded-xl py-3 px-4">
+            🎉 회원가입 완료! 로그인 페이지로 이동합니다...
+          </div>
+        )}
+
         <button
-          className="bg-blue-500 text-white rounded-lg py-2 font-semibold hover:bg-blue-600"
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-3 font-semibold text-lg transition-all duration-200 soft-shadow"
           type="submit"
         >
           회원가입
         </button>
-        <button
-          type="button"
-          className="text-gray-500 text-sm underline"
-          onClick={() => router.push("/login")}
-        >
-          로그인
-        </button>
+
+        <div className="text-center">
+          <button
+            type="button"
+            className="text-gray-500 text-sm hover:text-gray-700 underline transition-colors duration-200"
+            onClick={() => router.push("/login")}
+          >
+            이미 계정이 있으신가요? 로그인 →
+          </button>
+        </div>
       </form>
     </main>
   );

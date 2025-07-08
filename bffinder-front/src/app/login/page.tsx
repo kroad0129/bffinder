@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import type React from "react";
+
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -12,7 +14,6 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     try {
-      // 1. 로그인 요청 (JWT 토큰 획득)
       const res = await fetch("http://localhost:8080/api/user/login", {
         method: "POST",
         headers: {
@@ -29,56 +30,86 @@ export default function LoginPage() {
       const data = await res.json();
       localStorage.setItem("jwt_token", data.token);
 
-      // 2. 토큰으로 내 정보 요청 → 닉네임 저장
       const infoRes = await fetch("http://localhost:8080/api/user/me", {
         headers: { Authorization: `Bearer ${data.token}` },
       });
       if (infoRes.ok) {
         const info = await infoRes.json();
-        localStorage.setItem("login_nickname", info.nickname); // 받아오는 값이 nickname이면
+        localStorage.setItem("login_nickname", info.nickname);
       }
 
       router.push("/");
       router.refresh();
     } catch (e) {
-      setError("네트워크 오류!");
+      setError("네트워크 오류가 발생했습니다!");
     }
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
+    <main className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100 relative">
+      {/* 왼쪽 상단 로고 */}
+      <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
+        BFFinder
+      </div>
+
+      {/* 뒤로가기 버튼 */}
+      <button
+        className="absolute top-6 left-32 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl py-2.5 px-5 font-medium transition-all duration-200 soft-shadow"
+        onClick={() => router.push("/")}
+      >
+        ← 메인으로
+      </button>
+
+      {/* 메인 컨텐츠 - 완전 중앙 정렬 */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">로그인</h1>
+        <p className="text-gray-600">
+          {"관심 있는 소환사들을 확인해보세요 😊"}
+        </p>
+      </div>
+
       <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-2xl shadow-md flex flex-col gap-4 w-80"
+        className="bg-white/80 backdrop-blur-sm border border-gray-200 p-8 rounded-2xl soft-shadow-lg flex flex-col gap-5 w-96"
       >
-        <h2 className="text-xl font-bold text-center mb-2">로그인</h2>
-        <input
-          className="border rounded-lg px-4 py-2"
-          placeholder="아이디"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          className="border rounded-lg px-4 py-2"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <div className="text-red-500 text-sm">{error}</div>}
+        <div className="space-y-4">
+          <input
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="아이디"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        {error && (
+          <div className="text-red-600 text-sm text-center bg-red-50 border border-red-200 rounded-xl py-3 px-4">
+            {error}
+          </div>
+        )}
+
         <button
-          className="bg-blue-500 text-white rounded-lg py-2 font-semibold hover:bg-blue-600"
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-3 font-semibold text-lg transition-all duration-200 soft-shadow"
           type="submit"
         >
           로그인
         </button>
-        <button
-          type="button"
-          className="text-gray-500 text-sm underline"
-          onClick={() => router.push("/signup")}
-        >
-          회원가입
-        </button>
+
+        <div className="text-center">
+          <button
+            type="button"
+            className="text-gray-500 text-sm hover:text-gray-700 underline transition-colors duration-200"
+            onClick={() => router.push("/signup")}
+          >
+            계정이 없으신가요? 회원가입 →
+          </button>
+        </div>
       </form>
     </main>
   );
