@@ -1,7 +1,6 @@
-package com.example.bffinder.controller;
+package com.example.bffinder.league;
 
-import com.example.bffinder.dto.LeagueResponseDto;
-import com.example.bffinder.service.LeagueService;
+import com.example.bffinder.league.dto.LeagueResponseDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.bffinder.dto;
+package com.example.bffinder.account.dto;
 
 import lombok.Data;
 

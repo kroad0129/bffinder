@@ -1,4 +1,4 @@
-package com.example.bffinder.dto;
+package com.example.bffinder.match.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

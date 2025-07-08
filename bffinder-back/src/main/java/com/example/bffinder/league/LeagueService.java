@@ -1,6 +1,6 @@
-package com.example.bffinder.service;
+package com.example.bffinder.league;
 
-import com.example.bffinder.dto.LeagueResponseDto;
+import com.example.bffinder.league.dto.LeagueResponseDto;
 import com.example.bffinder.util.RiotApiClient;
 import org.springframework.stereotype.Service;
 

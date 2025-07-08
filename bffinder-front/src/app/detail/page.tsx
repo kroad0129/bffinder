@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import MatchList from "@/components/MatchList";
 import { timeAgo } from "@/components/TimeAgo";
@@ -15,12 +14,11 @@ type Match = {
 export default function DetailPage({
   searchParams,
 }: {
-  searchParams: { name: string; tag: string };
+  searchParams: { puuid: string };
 }) {
-  const name = searchParams.name;
-  const tag = searchParams.tag;
+  const puuid = searchParams.puuid;
 
-  const [puuid, setPuuid] = useState<string | null>(null);
+  const [nickname, setNickname] = useState<string | null>(null);
   const [matches, setMatches] = useState<Match[]>([]);
   const [lastGameEnd, setLastGameEnd] = useState<number | null>(null);
   const [isInGame, setIsInGame] = useState(false);
@@ -28,30 +26,25 @@ export default function DetailPage({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!name || !tag) return;
+    if (!puuid) return;
     (async () => {
       setLoading(true);
       setError(null);
-      setPuuid(null);
-      setMatches([]);
-      setIsInGame(false);
-      setLastGameEnd(null);
 
-      // 1) puuid 조회
-      const accRes = await fetch(
-        `http://localhost:8080/api/account/info?gameName=${encodeURIComponent(
-          name
-        )}&tagLine=${encodeURIComponent(tag)}`
-      );
-      if (!accRes.ok) {
-        setError("해당 소환사를 찾을 수 없습니다.");
-        setLoading(false);
-        return;
+      // 닉네임 fetch
+      try {
+        const res = await fetch(
+          `http://localhost:8080/api/account/puuid?puuid=${puuid}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setNickname(data.gameName); // 닉네임만 저장
+        }
+      } catch (e) {
+        // 에러 핸들링 필요하면 작성
       }
-      const { puuid } = await accRes.json();
-      setPuuid(puuid);
 
-      // 2) in-game 여부
+      // in-game 여부
       const igRes = await fetch(
         `http://localhost:8080/api/match/in-game?puuid=${puuid}`
       );
@@ -60,29 +53,29 @@ export default function DetailPage({
         setIsInGame(data.inGame);
       }
 
-      // 3) 최근 매치 리스트
+      // 최근 매치 리스트
       const listRes = await fetch(
-        `http://localhost:8080/api/match/list?puuid=${puuid}&count=20`
+        `http://localhost:8080/api/match/list?puuid=${puuid}&count=10`
       );
       if (listRes.ok) {
         const { matches } = await listRes.json();
         setMatches(matches);
-
-        // 마지막 게임 종료시간
         if (matches && matches.length > 0) {
           setLastGameEnd(matches[0].gameEndTimestamp);
         }
       }
       setLoading(false);
     })();
-  }, [name, tag]);
+  }, [puuid]);
 
   return (
     <main className="min-h-screen flex flex-col items-center bg-gray-50 py-10">
       <div className="w-full max-w-xl bg-white p-8 rounded-2xl shadow-md">
         {/* 상단 정보 */}
         <div className="flex items-center justify-between mb-6">
-          <span className="text-2xl font-bold">{name}</span>
+          <span className="text-2xl font-bold">
+            {nickname ? nickname : puuid}
+          </span>
           {loading ? (
             <span className="ml-4 text-gray-400 text-sm">불러오는 중...</span>
           ) : error ? (

@@ -1,8 +1,7 @@
-package com.example.bffinder.controller;
+package com.example.bffinder.match;
 
-import com.example.bffinder.dto.InGameResponseDto;
-import com.example.bffinder.dto.MatchGameListDto;
-import com.example.bffinder.service.MatchService;
+import com.example.bffinder.match.dto.InGameResponseDto;
+import com.example.bffinder.match.dto.MatchGameListDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;

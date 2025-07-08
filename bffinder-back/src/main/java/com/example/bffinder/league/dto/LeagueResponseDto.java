@@ -1,4 +1,4 @@
-package com.example.bffinder.dto;
+package com.example.bffinder.league.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package com.example.bffinder.service;
+package com.example.bffinder.match;
 
-import com.example.bffinder.dto.MatchGameResponseDto;
-import com.example.bffinder.dto.MatchGameListDto;
+import com.example.bffinder.match.dto.MatchGameResponseDto;
+import com.example.bffinder.match.dto.MatchGameListDto;
 import com.example.bffinder.util.RiotApiClient;
 import org.springframework.stereotype.Service;
 
