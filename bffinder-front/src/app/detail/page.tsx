@@ -54,9 +54,11 @@ function getStatusColor(lastGameEnd: number | null, isInGame: boolean) {
 export default function DetailPage({
   searchParams,
 }: {
-  searchParams: { puuid: string };
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const puuid = searchParams.puuid;
+  // puuid가 배열일 수도 있으니 안전하게 처리
+  const puuid = Array.isArray(searchParams.puuid) ? searchParams.puuid[0] : searchParams.puuid || "";
+
   const router = useRouter();
 
   const [nickname, setNickname] = useState<string | null>(null);
@@ -81,25 +83,35 @@ export default function DetailPage({
           const data = await res.json();
           setNickname(data.gameName);
         }
-      } catch (e) {}
-
-      const igRes = await fetch(
-        `http://localhost:8080/api/match/in-game?puuid=${puuid}`
-      );
-      if (igRes.ok) {
-        const data = await igRes.json();
-        setIsInGame(data.inGame);
+      } catch (e) {
+        setError("소환사 정보를 불러오는 데 실패했습니다.");
       }
 
-      const listRes = await fetch(
-        `http://localhost:8080/api/match/list?puuid=${puuid}&count=10`
-      );
-      if (listRes.ok) {
-        const { matches } = await listRes.json();
-        setMatches(matches);
-        if (matches && matches.length > 0) {
-          setLastGameEnd(matches[0].gameEndTimestamp);
+      try {
+        const igRes = await fetch(
+          `http://localhost:8080/api/match/in-game?puuid=${puuid}`
+        );
+        if (igRes.ok) {
+          const data = await igRes.json();
+          setIsInGame(data.inGame);
         }
+      } catch {
+        // 무시 혹은 필요 시 에러 처리
+      }
+
+      try {
+        const listRes = await fetch(
+          `http://localhost:8080/api/match/list?puuid=${puuid}&count=10`
+        );
+        if (listRes.ok) {
+          const { matches } = await listRes.json();
+          setMatches(matches);
+          if (matches && matches.length > 0) {
+            setLastGameEnd(matches[0].gameEndTimestamp);
+          }
+        }
+      } catch {
+        // 무시 혹은 필요 시 에러 처리
       }
       setLoading(false);
     })();
