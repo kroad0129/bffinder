@@ -12,7 +12,8 @@ export default function EmailVerifyPage() {
   const [resendMsg, setResendMsg] = useState<string | null>(null);
 
   // 인증 메일 재전송 요청 함수
-  const handleResend = async () => {
+  const handleResend = async (_e: React.MouseEvent) => {
+    _e.preventDefault();
     setResendLoading(true);
     setResendMsg(null);
 

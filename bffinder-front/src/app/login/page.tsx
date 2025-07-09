@@ -8,8 +8,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (_e: React.FormEvent) => {
+    _e.preventDefault();
     setError("");
 
     try {
@@ -22,7 +22,6 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        // 에러메시지 파싱
         let msg = "로그인 실패! 아이디 또는 비밀번호를 확인하세요.";
         try {
           const errData = await res.json();
@@ -30,7 +29,6 @@ export default function LoginPage() {
         } catch {}
 
         if (msg.includes("이메일 인증이 필요")) {
-          // 바로 인증대기 페이지로 이동
           router.push(
             `/signup/verify-pending?username=${encodeURIComponent(username)}`
           );
@@ -41,11 +39,9 @@ export default function LoginPage() {
         return;
       }
 
-      // 로그인 성공
       const data = await res.json();
       localStorage.setItem("jwt_token", data.token);
 
-      // 내 정보 저장
       const infoRes = await fetch("http://localhost:8080/api/user/me", {
         headers: { Authorization: `Bearer ${data.token}` },
       });
@@ -63,12 +59,10 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100 relative">
-      {/* 왼쪽 상단 로고 */}
       <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
         BFF
       </div>
 
-      {/* 뒤로가기 버튼 */}
       <button
         className="absolute top-6 left-32 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl py-2.5 px-5 font-medium transition-all duration-200 soft-shadow"
         onClick={() => router.push("/")}
@@ -76,12 +70,9 @@ export default function LoginPage() {
         ← 메인으로
       </button>
 
-      {/* 메인 컨텐츠 - 완전 중앙 정렬 */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">로그인</h1>
-        <p className="text-gray-600">
-          {"관심 있는 소환사들을 확인해보세요 😊"}
-        </p>
+        <p className="text-gray-600">관심 있는 소환사들을 확인해보세요 😊</p>
       </div>
 
       <form
@@ -104,7 +95,6 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* 에러 메시지 */}
         {error && (
           <div className="text-red-600 text-sm text-center bg-red-50 border border-red-200 rounded-xl py-3 px-4">
             {error}
