@@ -59,7 +59,7 @@ export default function Home() {
     <main className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100 relative">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
-        BFFinder
+        BFF
       </div>
 
       {/* 상단 네비게이션 */}

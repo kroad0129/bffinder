@@ -1,7 +1,5 @@
 "use client";
 import { useState } from "react";
-import type React from "react";
-
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -13,6 +11,7 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
     try {
       const res = await fetch("http://localhost:8080/api/user/login", {
         method: "POST",
@@ -23,13 +22,30 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        setError("로그인 실패! 아이디 또는 비밀번호를 확인하세요.");
+        // 에러메시지 파싱
+        let msg = "로그인 실패! 아이디 또는 비밀번호를 확인하세요.";
+        try {
+          const errData = await res.json();
+          if (errData.message) msg = errData.message;
+        } catch {}
+
+        if (msg.includes("이메일 인증이 필요")) {
+          // 바로 인증대기 페이지로 이동
+          router.push(
+            `/signup/verify-pending?username=${encodeURIComponent(username)}`
+          );
+          return;
+        } else {
+          setError(msg);
+        }
         return;
       }
 
+      // 로그인 성공
       const data = await res.json();
       localStorage.setItem("jwt_token", data.token);
 
+      // 내 정보 저장
       const infoRes = await fetch("http://localhost:8080/api/user/me", {
         headers: { Authorization: `Bearer ${data.token}` },
       });
@@ -49,7 +65,7 @@ export default function LoginPage() {
     <main className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100 relative">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
-        BFFinder
+        BFF
       </div>
 
       {/* 뒤로가기 버튼 */}
@@ -88,6 +104,7 @@ export default function LoginPage() {
           />
         </div>
 
+        {/* 에러 메시지 */}
         {error && (
           <div className="text-red-600 text-sm text-center bg-red-50 border border-red-200 rounded-xl py-3 px-4">
             {error}

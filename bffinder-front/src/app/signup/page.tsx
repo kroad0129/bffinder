@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import type React from "react";
-
 import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
@@ -11,19 +10,17 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [ok, setOk] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setOk(false);
+    setLoading(true);
 
     try {
       const res = await fetch("http://localhost:8080/api/user/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username,
           nickname,
@@ -35,13 +32,15 @@ export default function SignupPage() {
       if (!res.ok) {
         const errData = await res.json();
         setError(errData.message || "회원가입에 실패했습니다!");
+        setLoading(false);
         return;
       }
 
-      setOk(true);
-      setTimeout(() => router.push("/login"), 1500);
+      // 성공! => 이메일 인증 안내 페이지로 이동
+      router.push(`/signup/verify?email=${encodeURIComponent(email)}`);
     } catch (e) {
       setError("네트워크 오류가 발생했습니다!");
+      setLoading(false);
     }
   };
 
@@ -49,7 +48,7 @@ export default function SignupPage() {
     <main className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100 relative">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
-        BFFinder
+        BFF
       </div>
 
       {/* 뒤로가기 버튼 */}
@@ -92,6 +91,9 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          <div className="text-xs text-blue-500 font-semibold text-center pl-1 pb-1">
+            회원가입 시 이메일로 인증 안내메일이 발송됩니다.
+          </div>
           <input
             type="password"
             className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -107,17 +109,12 @@ export default function SignupPage() {
           </div>
         )}
 
-        {ok && (
-          <div className="text-emerald-600 text-sm text-center bg-emerald-50 border border-emerald-200 rounded-xl py-3 px-4">
-            🎉 회원가입 완료! 로그인 페이지로 이동합니다...
-          </div>
-        )}
-
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-3 font-semibold text-lg transition-all duration-200 soft-shadow"
           type="submit"
+          disabled={loading}
         >
-          회원가입
+          {loading ? "회원가입 중..." : "회원가입"}
         </button>
 
         <div className="text-center">

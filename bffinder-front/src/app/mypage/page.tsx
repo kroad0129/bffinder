@@ -152,7 +152,7 @@ export default function MyPage() {
     <main className="min-h-screen flex flex-col items-center pt-20 bg-gradient-to-br from-slate-50 to-slate-100 relative">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-6 left-6 text-lg font-semibold text-gray-700">
-        BFFinder
+        BFF
       </div>
 
       {/* 왼쪽 상단 뒤로가기 버튼 - 디테일 페이지와 동일한 스타일 */}
