@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -51,8 +52,7 @@ export default function LoginPage() {
       }
 
       router.push("/");
-      router.refresh();
-    } catch (e) {
+    } catch {
       setError("네트워크 오류가 발생했습니다!");
     }
   };

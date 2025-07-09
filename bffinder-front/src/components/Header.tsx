@@ -1,26 +1,34 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+"use client"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginNickname, setLoginNickname] = useState("");
-  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [loginNickname, setLoginNickname] = useState("")
+  const router = useRouter()
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    const nick = localStorage.getItem("login_nickname");
-    setIsLoggedIn(!!token);
-    setLoginNickname(nick || "");
-  }, []);
+    try {
+      const token = localStorage.getItem("jwt_token")
+      const nick = localStorage.getItem("login_nickname")
+      setIsLoggedIn(!!token)
+      setLoginNickname(nick || "")
+    } catch (error) {
+      console.error("localStorage access error:", error)
+    }
+  }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem("jwt_token");
-    localStorage.removeItem("login_nickname");
-    setIsLoggedIn(false);
-    setLoginNickname("");
-    router.refresh();
-  };
+    try {
+      localStorage.removeItem("jwt_token")
+      localStorage.removeItem("login_nickname")
+      setIsLoggedIn(false)
+      setLoginNickname("")
+      window.location.reload()
+    } catch (error) {
+      console.error("Logout error:", error)
+    }
+  }
 
   return (
     <div className="flex gap-3 absolute top-6 right-6 z-50">
@@ -56,5 +64,5 @@ export default function Header() {
         </>
       )}
     </div>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 "use client";
+
 import { useState } from "react";
-import type React from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
@@ -38,7 +38,7 @@ export default function SignupPage() {
 
       // 성공! => 이메일 인증 안내 페이지로 이동
       router.push(`/signup/verify?email=${encodeURIComponent(email)}`);
-    } catch (e) {
+    } catch {
       setError("네트워크 오류가 발생했습니다!");
       setLoading(false);
     }
