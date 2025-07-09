@@ -56,8 +56,10 @@ export default function DetailPage({
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  // puuid가 배열일 수도 있으니 안전하게 처리
-  const puuid = Array.isArray(searchParams.puuid) ? searchParams.puuid[0] : searchParams.puuid || "";
+  // puuid가 배열일 수도 있으니 첫 번째 요소로 안전하게 처리
+  const puuid = Array.isArray(searchParams.puuid)
+    ? searchParams.puuid[0]
+    : searchParams.puuid || "";
 
   const router = useRouter();
 
@@ -83,7 +85,7 @@ export default function DetailPage({
           const data = await res.json();
           setNickname(data.gameName);
         }
-      } catch (e) {
+      } catch {
         setError("소환사 정보를 불러오는 데 실패했습니다.");
       }
 
@@ -96,7 +98,7 @@ export default function DetailPage({
           setIsInGame(data.inGame);
         }
       } catch {
-        // 무시 혹은 필요 시 에러 처리
+        // 필요시 에러 처리
       }
 
       try {
@@ -111,7 +113,7 @@ export default function DetailPage({
           }
         }
       } catch {
-        // 무시 혹은 필요 시 에러 처리
+        // 필요시 에러 처리
       }
       setLoading(false);
     })();
