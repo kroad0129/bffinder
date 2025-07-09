@@ -73,7 +73,7 @@ export default function MyPage() {
       return
     }
 
-    fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/boyfriends/my", {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/boyfriends/my`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(async (res) => {
