@@ -17,9 +17,6 @@ import java.util.Arrays;
 @Configuration
 public class SecurityConfig {
 
-    // 환경변수에서 FRONTEND_URL 읽기
-    @Value("${front.url}")
-    private String frontendUrl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
@@ -49,6 +46,9 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    @Value("${front.url}")
+    private String frontendUrl;
 
     // CORS 설정
     @Bean
