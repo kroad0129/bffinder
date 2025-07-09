@@ -126,7 +126,7 @@ function DetailContent() {
     if (!alias) return
 
     setSaveMsg(null)
-    const res = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/boyfriends", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/boyfriends`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

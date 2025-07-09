@@ -39,7 +39,7 @@ function VerifyPendingContent() {
     setError("")
     setSent(false)
     try {
-      const res = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/resend-verify", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/resend-verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username }),

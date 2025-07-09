@@ -16,7 +16,7 @@ function VerifyContent() {
     setResendMsg(null)
 
     try {
-      const res = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/resend-verification", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/resend-verification`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
