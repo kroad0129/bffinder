@@ -73,7 +73,7 @@ export default function MyPage() {
       return
     }
 
-    fetch("http://localhost:8080/api/boyfriends/my", {
+    fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/boyfriends/my", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(async (res) => {
@@ -88,13 +88,13 @@ export default function MyPage() {
   useEffect(() => {
     if (!list.length) return
     list.forEach((bf) => {
-      fetch(`http://localhost:8080/api/account/puuid?puuid=${encodeURIComponent(bf.puuid)}`)
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/account/puuid?puuid=${encodeURIComponent(bf.puuid)}`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           if (data && data.gameName) setNameMap((prev) => ({ ...prev, [bf.puuid]: data.gameName }))
         })
 
-      fetch(`http://localhost:8080/api/match/in-game?puuid=${encodeURIComponent(bf.puuid)}`)
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/match/in-game?puuid=${encodeURIComponent(bf.puuid)}`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           setStatusMap((prev) => ({
@@ -106,7 +106,7 @@ export default function MyPage() {
           }))
         })
 
-      fetch(`http://localhost:8080/api/match/list?puuid=${encodeURIComponent(bf.puuid)}&count=1`)
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/match/list?puuid=${encodeURIComponent(bf.puuid)}&count=1`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           let lastGameEnd = null
@@ -138,7 +138,7 @@ export default function MyPage() {
       return
     }
 
-    const res = await fetch(`http://localhost:8080/api/boyfriends/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/boyfriends/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     })

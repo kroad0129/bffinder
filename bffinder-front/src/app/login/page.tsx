@@ -14,7 +14,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:8080/api/user/login", {
+      const res = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export default function LoginPage() {
       const data = await res.json();
       localStorage.setItem("jwt_token", data.token);
 
-      const infoRes = await fetch("http://localhost:8080/api/user/me", {
+      const infoRes = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/me", {
         headers: { Authorization: `Bearer ${data.token}` },
       });
       if (infoRes.ok) {

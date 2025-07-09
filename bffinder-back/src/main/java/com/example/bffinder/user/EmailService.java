@@ -12,7 +12,7 @@ import jakarta.mail.internet.MimeMessage;
 public class EmailService {
     private final JavaMailSender mailSender;
 
-    @Value("${app.domain}") // application.properties에 추가 필요!
+    @Value("${back.url}") // application.properties에 추가 필요!
     private String appDomain;
 
     // 메일 인증 링크 발송

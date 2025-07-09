@@ -20,7 +20,7 @@ function VerifyPendingContent() {
       return
     }
 
-    fetch(`http://localhost:8080/api/user/email?username=${encodeURIComponent(username)}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/email?username=${encodeURIComponent(username)}`)
       .then((res) => {
         if (!res.ok) throw new Error("계정 정보 조회 실패")
         return res.json()
@@ -39,7 +39,7 @@ function VerifyPendingContent() {
     setError("")
     setSent(false)
     try {
-      const res = await fetch("http://localhost:8080/api/user/resend-verify", {
+      const res = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/resend-verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username }),

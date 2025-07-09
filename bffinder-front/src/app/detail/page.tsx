@@ -72,7 +72,7 @@ function DetailContent() {
       setError(null)
 
       try {
-        const res = await fetch(`http://localhost:8080/api/account/puuid?puuid=${puuid}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/account/puuid?puuid=${puuid}`)
         if (res.ok) {
           const data = await res.json()
           setNickname(data.gameName)
@@ -82,7 +82,7 @@ function DetailContent() {
       }
 
       try {
-        const igRes = await fetch(`http://localhost:8080/api/match/in-game?puuid=${puuid}`)
+        const igRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/match/in-game?puuid=${puuid}`)
         if (igRes.ok) {
           const data = await igRes.json()
           setIsInGame(data.inGame)
@@ -92,7 +92,7 @@ function DetailContent() {
       }
 
       try {
-        const listRes = await fetch(`http://localhost:8080/api/match/list?puuid=${puuid}&count=10`)
+        const listRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/match/list?puuid=${puuid}&count=10`)
         if (listRes.ok) {
           const { matches } = await listRes.json()
           setMatches(matches)
@@ -126,7 +126,7 @@ function DetailContent() {
     if (!alias) return
 
     setSaveMsg(null)
-    const res = await fetch("http://localhost:8080/api/boyfriends", {
+    const res = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/api/boyfriends", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -46,7 +46,7 @@ export default function Home() {
     setLoading(true)
     try {
       const res = await fetch(
-        `http://localhost:8080/api/account/nametag?gameName=${encodeURIComponent(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/account/nametag?gameName=${encodeURIComponent(
           nickname,
         )}&tagLine=${encodeURIComponent(tag)}`,
       )
