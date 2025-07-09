@@ -12,8 +12,8 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSignup = async (_e: React.FormEvent) => {
-    _e.preventDefault();
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault(); // 이벤트 객체 e는 여기서만 사용됩니다.
     setError("");
     setLoading(true);
 
