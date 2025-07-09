@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     // 환경변수에서 FRONTEND_URL 읽기
-    @Value("${frontend.url}")
+    @Value("${front.url}")
     private String frontendUrl;
 
     @Bean
